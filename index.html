@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Page Title</title>
+    <title>Local test</title>
 
     <style>
       body {
@@ -16,15 +16,6 @@
     <div id="gift-frame"></div>
 
     <script type="text/javascript">
-      var iframe_holder = document.getElementById("gift-frame");
-      var iframe_ct = document.createElement("div");
-
-      var close_iframe = document.createElement("a");
-      var close_iframe_image = document.createElement("img");
-      var local_url = "https://staging.atento.me";
-
-      var gift_frame = document.createElement("iframe");
-
       urlp = [];
       u = location.search
         .replace("?", "")
@@ -33,7 +24,14 @@
           e = d.split("=");
           urlp[e[0]] = e[1];
         });
-      var merchant_id = urlp["mID"];
+
+      var iframe_holder = document.getElementById("gift-frame");
+      var iframe_ct = document.createElement("div");
+      var close_iframe = document.createElement("a");
+      var close_iframe_image = document.createElement("img");
+      var local_url = "https://staging.atento.me";
+      var merchant_id = "26";
+      var gift_frame = document.createElement("iframe");
 
       close_iframe_image.src = "https://marketplace.atento.me/assets/close.png";
       close_iframe.appendChild(close_iframe_image);
@@ -41,14 +39,14 @@
       close_iframe.setAttribute("onclick", "parent.toggle_off()");
       close_iframe.style.cssText =
         "zindex: #{102};position: absolute; top: 15px !important; right: 25px !important; background: none !important";
-      //  iframe_holder.id = "gift-frame";
+      iframe_holder.id = "gift-frame";
       iframe_holder.frameBorder = 0;
       iframe_holder.style.cssText =
         "zindex:102;display:none;width: 100% !important;height: 100% !important;position: fixed;right: 0px !important;top: 0px !important;color: white;background-color: rgba(0, 0, 0, 0.5);padding: 0px;margin: 0px;z-index: 102;";
       iframe_ct.id = "frame-ct";
       iframe_ct.style.cssText =
         "height: calc(100% - 50px);width: 100%;margin: 0 auto;background: #fff;position: relative;z-index: 99999;overflow: hidden;max-width: 996px;max-height: 560px;top: 12.38px;";
-      locale = urlp["locale"];
+      locale = "en";
       gift_frame.style.width = "100%";
       gift_frame.style.height = "100%";
       gift_frame.classList.add("atentoFrame");
@@ -84,7 +82,7 @@
       activator.innerHTML =
         "<div style='font-family: Arial, sans-serif;bottom: 160px;background-color: #5e79bb;color: #ffffff;border-style: solid;border-width: 0px;width: max-content;cursor: pointer;-webkit-transform-origin: 100% 100%;-moz-transform-origin: 100% 100%;-o-transform-origin: 100% 100%;-ms-transform-origin: 100% 100%;-webkit-transform: rotate(-90deg);-moz-transform: rotate(-90deg);-ms-transform: rotate(-90deg);-o-transform: rotate(-90deg);transform: rotate(-90deg);position: absolute;margin: 0;padding: 6px 13px 8px 13px;text-decoration: none;text-align: center;font-size: 15px;font-weight: bold;border-style: solid;'>Gutschein verschenken</div>";
       var atento_on = false;
-      var product = 80;
+      var product = null;
       get_language = function() {
         return locale;
       };
@@ -111,13 +109,7 @@
         }
         url = url + "?locale=" + get_language();
         url = url + "&in_frame=true";
-
         return url;
-      };
-
-      set_url = function() {
-        url = build_url();
-        gift_frame.src = url;
       };
 
       set_url = function() {
@@ -183,25 +175,20 @@
         gift_frame.src = "https://app.atento.me/loading";
       };
       atento_toggle = function(ev) {
-        // if (ev && ev.dataset.merchant) {
-        //   set_merchant_id(ev.dataset.merchant);
-        // }
-
-        console.log("URLP: ");
-        const pitem = urlp["item"] !== "" ? urlp["item"] : null;
-        const plocale = urlp["locale"] !== "" ? urlp["locale"] : null;
-
-        if (plocale && pitem) {
-          set_language(plocale);
-          set_product(pitem);
+        if (ev && ev.dataset.merchant) {
+          set_merchant_id(ev.dataset.merchant);
+        }
+        if (ev && ev.dataset.locale && (ev && ev.dataset.item)) {
+          set_language(ev.dataset.locale);
+          set_product(ev.dataset.item);
           set_url();
         } else {
-          if (pitem) {
-            set_product(pitem);
+          if (ev && ev.dataset.item) {
+            set_product(ev.dataset.item);
             set_url();
           }
-          if (plocale) {
-            set_language(plocale);
+          if (ev && ev.dataset.locale) {
+            set_language(ev.dataset.locale);
             set_url();
           }
         }
@@ -273,7 +260,15 @@
       if (url.indexOf("?" + field + "=") != -1) atento_toggle();
       else if (url.indexOf("&" + field + "=") != -1) atento_toggle();
 
-      atento_toggle();
+      const evParams = { dataset: {} };
+      if (urlp["mID"] && urlp["mID"] !== "")
+        evParams.dataset.merchant = urlp["mID"];
+      if (urlp["item"] && urlp["item"] !== "")
+        evParams.dataset.item = urlp["item"];
+      if (urlp["locale"] && urlp["locale"] !== "")
+        evParams.dataset.local = urlp["locale"];
+
+      atento_toggle(evParams);
     </script>
   </body>
 </html>
