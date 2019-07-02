@@ -273,8 +273,8 @@
         evParams.dataset.merchant = urlp["mID"];
       if (urlp["item"] && urlp["item"] !== "")
         evParams.dataset.item = urlp["item"];
-      if (urlp["locale"] && urlp["locale"] !== "")
-        evParams.dataset.locale = "de";
+      if (urlp["lang"] && urlp["lang"] !== "")
+        evParams.dataset.locale = urlp["lang"];
 
       atento_toggle(evParams);
     </script>
