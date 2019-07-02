@@ -84,10 +84,12 @@
       var atento_on = false;
       var product = null;
       get_language = function() {
+        console.log("getting languague: " + locale);
         return locale;
       };
 
       set_language = function(lang) {
+        console.log("setting languague to: " + lang);
         locale = lang;
       };
 
@@ -114,6 +116,7 @@
 
       set_url = function() {
         url = build_url();
+        console.log("URL is : " + url);
         gift_frame.src = url;
       };
 
@@ -178,16 +181,21 @@
         if (ev && ev.dataset.merchant) {
           set_merchant_id(ev.dataset.merchant);
         }
+        console.log("ev is: ", ev);
         if (ev && ev.dataset.locale && (ev && ev.dataset.item)) {
+          console.log("1");
           set_language(ev.dataset.locale);
           set_product(ev.dataset.item);
           set_url();
         } else {
+          console.log("2");
           if (ev && ev.dataset.item) {
+            console.log("3");
             set_product(ev.dataset.item);
             set_url();
           }
           if (ev && ev.dataset.locale) {
+            console.log("4");
             set_language(ev.dataset.locale);
             set_url();
           }
@@ -266,7 +274,7 @@
       if (urlp["item"] && urlp["item"] !== "")
         evParams.dataset.item = urlp["item"];
       if (urlp["locale"] && urlp["locale"] !== "")
-        evParams.dataset.local = urlp["locale"];
+        evParams.dataset.locale = urlp["locale"];
 
       atento_toggle(evParams);
     </script>
