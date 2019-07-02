@@ -17,14 +17,23 @@
 
     <script type="text/javascript">
       var iframe_holder = document.getElementById("gift-frame");
-
       var iframe_ct = document.createElement("div");
 
       var close_iframe = document.createElement("a");
       var close_iframe_image = document.createElement("img");
       var local_url = "https://staging.atento.me";
-      var merchant_id = "26";
+
       var gift_frame = document.createElement("iframe");
+
+      urlp = [];
+      u = location.search
+        .replace("?", "")
+        .split("&")
+        .forEach(function(d) {
+          e = d.split("=");
+          urlp[e[0]] = e[1];
+        });
+      var merchant_id = urlp["mID"];
 
       close_iframe_image.src = "https://marketplace.atento.me/assets/close.png";
       close_iframe.appendChild(close_iframe_image);
@@ -39,7 +48,7 @@
       iframe_ct.id = "frame-ct";
       iframe_ct.style.cssText =
         "height: calc(100% - 50px);width: 100%;margin: 0 auto;background: #fff;position: relative;z-index: 99999;overflow: hidden;max-width: 996px;max-height: 560px;top: 12.38px;";
-      locale = "en";
+      locale = urlp["locale"];
       gift_frame.style.width = "100%";
       gift_frame.style.height = "100%";
       gift_frame.classList.add("atentoFrame");
@@ -111,6 +120,10 @@
         gift_frame.src = url;
       };
 
+        url = build_url();
+        gift_frame.src = url;
+      };
+
       function detectIE() {
         var ua = window.navigator.userAgent;
 
@@ -169,20 +182,25 @@
         gift_frame.src = "https://app.atento.me/loading";
       };
       atento_toggle = function(ev) {
-        if (ev && ev.dataset.merchant) {
-          set_merchant_id(ev.dataset.merchant);
-        }
-        if (ev && ev.dataset.locale && (ev && ev.dataset.item)) {
-          set_language(ev.dataset.locale);
-          set_product(ev.dataset.item);
+        // if (ev && ev.dataset.merchant) {
+        //   set_merchant_id(ev.dataset.merchant);
+        // }
+
+        console.log("URLP: ");
+        const pitem = urlp["item"] !== "" ? urlp["item"] : null;
+        const plocale = urlp["locale"] !== "" ? urlp["locale"] : null;
+
+        if (plocale && pitem) {
+          set_language(plocale);
+          set_product(pitem);
           set_url();
         } else {
-          if (ev && ev.dataset.item) {
-            set_product(ev.dataset.item);
+          if (pitem) {
+            set_product(pitem);
             set_url();
           }
-          if (ev && ev.dataset.locale) {
-            set_language(ev.dataset.locale);
+          if (plocale) {
+            set_language(plocale);
             set_url();
           }
         }
