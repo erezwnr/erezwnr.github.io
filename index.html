@@ -9,7 +9,7 @@
       href="https://staging.atento.me/assets/MyFontsWebfontsKit-7f673b456b342721eb8097e05e7239042148a8d1d7dfbf6f6187c4719cd855f9.css"
     />
   </head>
-  <body>
+  <body onload="onPageLoad()">
     <div id="container" class="container">
       <div class="leftContainer">
         <img
@@ -21,6 +21,8 @@
       <div class="rightContainer">
         <h2>Welcome To ATENTO</h2>
         <p>The gift catalog tailored to your business.</p>
+
+        <!-- <p>Name:</p> -->
         <input
           autofocus="autofocus"
           placeholder="name"
@@ -30,6 +32,8 @@
           name="user[name]"
           id="user_name"
         />
+
+        <!-- <p>Email:</p> -->
         <input
           autofocus="autofocus"
           placeholder="email"
@@ -40,6 +44,7 @@
           name="user[email]"
           id="user_email"
         />
+        <!-- <p>Website:</p> -->
         <input
           autofocus="autofocus"
           placeholder="website"
@@ -50,6 +55,7 @@
           name="user[website]"
           id="user_website"
         />
+        <!-- <p>Password:</p> -->
         <input
           placeholder="password"
           autocomplete="off"
@@ -68,5 +74,23 @@
         />
       </div>
     </div>
+
+    <script>
+      function onPageLoad() {
+        const email = getUrlParameter("email");
+        document.getElementById("user_email").value = email;
+        const website = getUrlParameter("website");
+        document.getElementById("user_website").value = website;
+      }
+
+      function getUrlParameter(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        var results = regex.exec(location.search);
+        return results === null
+          ? ""
+          : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
+    </script>
   </body>
 </html>
